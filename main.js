@@ -11,7 +11,8 @@ class Snake{
         this.direction = 0;//<- = 1 then clockwise++
         this.len = 0;
         this.tail = [];
-        
+        this.dead = false;
+
         this.geometry = {w:this.grid,h:this.grid,x:0,y:0};
         this.velocity = {x:0,y:0};
         this.canvas = document.querySelector("#can");
@@ -77,7 +78,7 @@ class Snake{
         this.dt = t-this.lt;
         let ts = Math.floor(tp/this.physicsSampleRate);
 
-        if (ts != this.lts){
+        if (ts != this.lts && !this.dead){
             //physics 
             let lastX = this.geometry.x;
             let lastY = this.geometry.y;
@@ -102,31 +103,38 @@ class Snake{
                 this.geometry.y = 0;
             }
 
-            let colx= Math.abs(this.geometry.x - this.opponent.x);
-            let coly= Math.abs(this.geometry.y - this.opponent.y);
-            let hit = false;
+            let hit = this.checkCollision(this.geometry,this.opponent);
             this.tail.unshift({x:lastX,y:lastY});
 
-            if (colx<this.grid && coly<this.grid){
+            if (hit) {
                 this.opponent = this.spawn();
-                //this.v=this.v+10;
+                
                 if (this.physicsSampleRate > 5){
                     this.physicsSampleRate--;
                 }
-                hit = true;
                 this.len++;
-                //this.tail.push({x:lastX,y:lastY});
-
             }
+
             if (this.tail != null && !hit){
                 this.tail.pop();
-                
             }
 
-                
+            //check tail collision
+            for (let i = 0; i < this.tail.length; i++){
+                if (this.checkCollision(this.geometry,this.tail[i])){
+                    this.dead = true;
+                    break;
+                }
+            }
+            
+            if (this.dead){
+                // message / restart..
+                alert("you're dead");
+            }
             
         }
 
+       
         
         //rendering
         this.ctx.fillStyle="white";
@@ -156,7 +164,18 @@ class Snake{
         },1000/this.fps);
 
     }
-    
+
+    checkCollision(o,other) {
+        let colx= Math.abs(o.x - other.x);
+        let coly= Math.abs(o.y - other.y);
+        let hit = false;
+        
+
+        if (colx<this.grid && coly<this.grid){
+            hit = true;
+        }
+        return hit;
+    }
 }
 
 let s = new Snake();
