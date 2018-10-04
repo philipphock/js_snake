@@ -1,0 +1,12 @@
+html{
+    background: #7e7e7e;
+
+}
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+html{
+    margin-top: 20px;
+}

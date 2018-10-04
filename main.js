@@ -88,18 +88,18 @@ class Snake{
             this.geometry.y = this.geometry.y+this.velocity.y;
             
             if (this.geometry.x < -this.grid){
-                this.geometry.x = this.canvas.width+this.grid;
+                this.geometry.x = this.canvas.width;
             }
             
-            if (this.geometry.x > this.canvas.width+this.grid){
-                this.geometry.x = -this.grid;
+            if (this.geometry.x > this.canvas.width){
+                this.geometry.x = 0;
             }
-            if (this.geometry.y < -this.grid){
-                this.geometry.y = this.canvas.height+this.grid;
+            if (this.geometry.y < 0){
+                this.geometry.y = this.canvas.height;
             }
             
-            if (this.geometry.y > this.canvas.height+this.grid){
-                this.geometry.y = -this.grid;
+            if (this.geometry.y > this.canvas.height){
+                this.geometry.y = 0;
             }
 
             let colx= Math.abs(this.geometry.x - this.opponent.x);
